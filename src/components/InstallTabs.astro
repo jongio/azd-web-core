@@ -1,0 +1,141 @@
+---
+export interface Tab {
+  label: string;
+  icon?: string;
+  commands: string[];
+}
+
+/** OS-tabbed install instructions with WAI-ARIA tablist pattern and copy buttons. */
+export interface Props {
+  tabs: Tab[];
+}
+
+const { tabs } = Astro.props;
+const tabsId = `itabs-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div class="overflow-hidden rounded-[var(--radius-lg)]" style="background-color: color-mix(in srgb, var(--color-text) 6%, var(--color-background));">
+  <!-- Tab buttons -->
+  <div
+    class="flex gap-0 overflow-x-auto border-b"
+    style="border-color: var(--color-border);"
+    role="tablist"
+    data-install-tabs
+  >
+    {tabs.map((tab, i) => (
+      <button
+        id={`${tabsId}-tab-${i}`}
+        role="tab"
+        aria-selected={i === 0 ? "true" : "false"}
+        aria-controls={`${tabsId}-panel-${i}`}
+        tabindex={i === 0 ? 0 : -1}
+        class="inline-flex items-center gap-1.5 whitespace-nowrap px-[var(--space-4)] py-2.5 text-[13px] font-semibold transition-colors"
+        style={i === 0
+          ? "color: var(--color-primary); border-bottom: 2px solid var(--color-primary);"
+          : "color: var(--color-text-muted); border-bottom: 2px solid transparent;"}
+        data-tab-index={i}
+      >
+        {tab.icon && <Fragment set:html={tab.icon} />}
+        {tab.label}
+      </button>
+    ))}
+  </div>
+
+  <!-- Tab panels -->
+  {tabs.map((tab, i) => (
+    <div
+      id={`${tabsId}-panel-${i}`}
+      role="tabpanel"
+      aria-labelledby={`${tabsId}-tab-${i}`}
+      class={i === 0 ? "block" : "hidden"}
+      data-panel-index={i}
+    >
+      <div class="relative px-[var(--space-4)] py-[var(--space-3)]">
+        <pre
+          class="overflow-x-auto text-[13px] leading-relaxed"
+          style="color: var(--color-text); font-family: var(--font-mono); margin: 0;"
+        ><code>{tab.commands.join("\n")}</code></pre>
+        <button
+          class="absolute right-3 top-3 rounded-md px-2 py-0.5 text-[11px] opacity-60 transition-opacity hover:opacity-100"
+          style="background-color: var(--color-surface); color: var(--color-text-muted); border: 1px solid var(--color-border);"
+          aria-label={`Copy ${tab.label} commands`}
+          data-copy={tab.commands.join("\n")}
+        >
+          Copy
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
+
+<script>
+  function initInstallTabs() {
+    document.querySelectorAll("[data-install-tabs]").forEach((tablist) => {
+      const container = tablist.parentElement!;
+      const tabs = Array.from(tablist.querySelectorAll("[role='tab']"));
+      const panels = container.querySelectorAll("[role='tabpanel']");
+
+      function activateTab(tab: Element) {
+        const index = (tab as HTMLElement).dataset.tabIndex;
+        tabs.forEach((t) => {
+          const el = t as HTMLElement;
+          el.setAttribute("aria-selected", "false");
+          el.setAttribute("tabindex", "-1");
+          el.style.color = "var(--color-text-muted)";
+          el.style.borderBottom = "2px solid transparent";
+        });
+        (tab as HTMLElement).setAttribute("aria-selected", "true");
+        (tab as HTMLElement).setAttribute("tabindex", "0");
+        (tab as HTMLElement).style.color = "var(--color-primary)";
+        (tab as HTMLElement).style.borderBottom = "2px solid var(--color-primary)";
+        (tab as HTMLElement).focus();
+        panels.forEach((p) => {
+          const el = p as HTMLElement;
+          el.classList.toggle("hidden", el.dataset.panelIndex !== index);
+          el.classList.toggle("block", el.dataset.panelIndex === index);
+        });
+      }
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => activateTab(tab));
+      });
+
+      tablist.addEventListener("keydown", (e: Event) => {
+        const event = e as KeyboardEvent;
+        const current = tabs.findIndex((t) => t.getAttribute("aria-selected") === "true");
+        let next: number | null = null;
+        if (event.key === "ArrowRight") next = (current + 1) % tabs.length;
+        else if (event.key === "ArrowLeft") next = (current - 1 + tabs.length) % tabs.length;
+        else if (event.key === "Home") next = 0;
+        else if (event.key === "End") next = tabs.length - 1;
+        if (next !== null) {
+          event.preventDefault();
+          activateTab(tabs[next]);
+        }
+      });
+    });
+
+    document.querySelectorAll("[data-copy]").forEach((btn) => {
+      let copying = false;
+      const originalText = btn.textContent;
+      btn.addEventListener("click", async () => {
+        if (copying) return;
+        copying = true;
+        const text = (btn as HTMLElement).dataset.copy || "";
+        try {
+          await navigator.clipboard.writeText(text);
+          btn.textContent = "Copied!";
+        } catch {
+          btn.textContent = "Error";
+        }
+        setTimeout(() => { btn.textContent = originalText; copying = false; }, 1500);
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initInstallTabs);
+  } else {
+    initInstallTabs();
+  }
+</script>

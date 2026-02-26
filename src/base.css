@@ -1,0 +1,132 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+/* Tell Tailwind to scan shared component files for utility classes */
+@source "./components/*.astro";
+
+/* ==========================================================================
+   Base Styles — "Developer Terminal"
+   ========================================================================== */
+
+/* ---- Body ---- */
+body {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-normal);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+/* ---- Headings ---- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.2;
+  color: var(--color-text);
+}
+
+h1 { font-size: var(--text-3xl); }
+h2 { font-size: var(--text-2xl); }
+h3 { font-size: var(--text-xl); }
+h4 { font-size: var(--text-lg); }
+h5 { font-size: var(--text-base); }
+h6 { font-size: var(--text-sm); font-weight: var(--font-weight-semibold); }
+
+/* ---- Links ---- */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ---- Code ---- */
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
+}
+
+code:not(pre code) {
+  background-color: var(--color-surface-2);
+  padding: 0.125em 0.375em;
+  border-radius: var(--radius-sm);
+  font-size: 0.9em;
+}
+
+/* ---- Selection ---- */
+::selection {
+  background-color: color-mix(in srgb, var(--color-primary) 20%, transparent);
+}
+
+/* ---- Scrollbar ---- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* ---- Buttons ---- */
+button {
+  cursor: pointer;
+}
+
+/* ---- Focus ring ---- */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ---- Animations ---- */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px color-mix(in srgb, var(--color-primary) 15%, transparent); }
+  50% { box-shadow: 0 0 20px color-mix(in srgb, var(--color-primary) 30%, transparent); }
+}
+
+.animate-fade-in {
+  animation: fade-in var(--transition-normal) ease-out both;
+}
+
+.animate-slide-up {
+  animation: slide-up var(--transition-slow) ease-out both;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* ---- Reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,67 @@
+---
+/** Styled code block with optional title bar (terminal dots) and copy-to-clipboard. */
+export interface Props {
+  code: string;
+  lang?: string;
+  title?: string;
+  showCopy?: boolean;
+}
+
+const { code, lang = "shell", title, showCopy = true } = Astro.props;
+---
+
+<div class="relative rounded-[var(--radius-md)]" style="background-color: color-mix(in srgb, var(--color-text) 6%, var(--color-background));">
+  {title && (
+    <div
+      class="flex items-center gap-[var(--space-2)] px-[var(--space-4)] py-[var(--space-2)]"
+      style="border-bottom: 1px solid var(--color-border);"
+    >
+      <div class="flex gap-1.5">
+        <span class="inline-block h-2.5 w-2.5 rounded-full" style="background-color: #f87171;"></span>
+        <span class="inline-block h-2.5 w-2.5 rounded-full" style="background-color: #fbbf24;"></span>
+        <span class="inline-block h-2.5 w-2.5 rounded-full" style="background-color: #34d399;"></span>
+      </div>
+      <span class="ml-2 text-xs" style="color: var(--color-text-muted); font-family: var(--font-mono);">
+        {title}
+      </span>
+    </div>
+  )}
+
+  <div class="relative">
+    <pre
+      class="overflow-x-auto px-[var(--space-4)] py-[var(--space-3)] text-[13px] leading-relaxed"
+      style="color: var(--color-text); font-family: var(--font-mono); margin: 0;"
+    ><code data-lang={lang}>{code}</code></pre>
+
+    {showCopy && (
+      <button
+        class="absolute right-2 top-2 rounded-md px-2 py-0.5 text-[11px] opacity-60 transition-opacity hover:opacity-100"
+        style="background-color: var(--color-surface); color: var(--color-text-muted); border: 1px solid var(--color-border);"
+        aria-label="Copy code to clipboard"
+        data-copy-code
+      >
+        Copy
+      </button>
+    )}
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll("[data-copy-code]").forEach((btn) => {
+    let copying = false;
+    const originalText = btn.textContent;
+    btn.addEventListener("click", async () => {
+      if (copying) return;
+      copying = true;
+      const pre = btn.closest("div")?.querySelector("pre");
+      const text = pre?.textContent || "";
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = "Copied!";
+      } catch {
+        btn.textContent = "Error";
+      }
+      setTimeout(() => { btn.textContent = originalText; copying = false; }, 1500);
+    });
+  });
+</script>

@@ -1,0 +1,28 @@
+---
+/** Breadcrumb navigation showing current extension within the azd suite. */
+export interface Props {
+  currentExtension: string;
+  hubUrl?: string;
+}
+
+const { currentExtension, hubUrl } = Astro.props;
+---
+
+<div
+  class="flex items-center gap-[var(--space-2)] px-[var(--space-6)] py-[var(--space-2)] text-xs"
+  style="background-color: var(--color-surface); border-bottom: 1px solid var(--color-border); color: var(--color-text-muted);"
+>
+  {hubUrl ? (
+    <a
+      href={hubUrl}
+      class="transition-colors hover:no-underline"
+      style="color: var(--color-text-muted);"
+    >
+      azd extensions
+    </a>
+  ) : (
+    <span>azd extensions</span>
+  )}
+  <span aria-hidden="true" style="color: var(--color-border);">→</span>
+  <span style="color: var(--color-primary);" class="font-semibold">azd {currentExtension}</span>
+</div>

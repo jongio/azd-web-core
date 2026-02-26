@@ -1,0 +1,26 @@
+# Dependencies
+node_modules
+.pnpm-store/
+
+# Environment / secrets
+.env
+.env.*
+*.local
+
+# Logs
+*.log
+
+# Editor
+.vscode/
+.idea/
+
+# Build outputs
+dist/
+*.tsbuildinfo
+
+# Coverage
+coverage/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,79 @@
+---
+/** Numbered step card for getting-started flows with optional code snippet. */
+export interface Props {
+  number: number;
+  title: string;
+  description?: string;
+  code?: string;
+}
+
+const { number, title, description, code } = Astro.props;
+const paddedNumber = String(number).padStart(2, "0");
+---
+
+<div
+  class="flex gap-[var(--space-4)] rounded-[var(--radius-lg)] border p-[var(--space-6)]"
+  style="background-color: var(--color-surface); border-color: var(--color-border);"
+>
+  <div
+    class="flex-shrink-0 text-3xl font-bold leading-none"
+    style="font-family: var(--font-mono); color: var(--color-primary); font-size: var(--text-xl);"
+    aria-hidden="true"
+  >
+    {paddedNumber}
+  </div>
+
+  <div class="min-w-0 flex-1">
+    <h3 class="mb-[var(--space-1)] text-base font-semibold" style="color: var(--color-text);">
+      {title}
+    </h3>
+
+    {description && (
+      <p class="mb-[var(--space-3)] text-sm leading-relaxed" style="color: var(--color-text-muted);">
+        {description}
+      </p>
+    )}
+
+    {code && (
+      <div class="group relative">
+        <pre
+          class="overflow-x-auto rounded-md px-3 py-2 pr-10 text-[12px]"
+          style="background-color: color-mix(in srgb, var(--color-text) 6%, var(--color-background)); color: var(--color-text); font-family: var(--font-mono); white-space: pre-wrap; word-break: break-all;"
+        ><code>{code}</code></pre>
+        <button
+          type="button"
+          class="copy-btn absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100"
+          style="color: var(--color-text-muted); background: transparent;"
+          aria-label="Copy command"
+          data-code={code}
+        >
+          <svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+          </svg>
+        </button>
+      </div>
+    )}
+  </div>
+</div>
+
+<script>
+  let copying = false;
+  document.querySelectorAll(".copy-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      if (copying) return;
+      copying = true;
+      const code = btn.getAttribute("data-code") || "";
+      try {
+        await navigator.clipboard.writeText(code);
+        btn.setAttribute("aria-label", "Copied!");
+        setTimeout(() => {
+          btn.setAttribute("aria-label", "Copy command");
+          copying = false;
+        }, 2000);
+      } catch {
+        copying = false;
+      }
+    });
+  });
+</script>

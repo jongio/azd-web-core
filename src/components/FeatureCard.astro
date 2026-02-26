@@ -1,0 +1,64 @@
+---
+/** Feature highlight card with icon, hover glow effect, and optional link wrapper. */
+export interface Props {
+  title: string;
+  description: string;
+  icon?: string;
+  href?: string;
+  badge?: string;
+  glowColor?: string;
+}
+
+const { title, description, icon, href, badge, glowColor } = Astro.props;
+const Tag = href ? "a" : "div";
+const glowVar = glowColor || "var(--color-primary)";
+---
+
+<Tag
+  href={href || undefined}
+  class:list={[
+    "feature-card group relative block rounded-[var(--radius-lg)] border p-[var(--space-6)] transition-[transform,box-shadow,border-color] duration-300",
+    href && "cursor-pointer no-underline",
+  ]}
+  style={`background-color: var(--color-surface); border-color: var(--color-border); box-shadow: var(--shadow-card); --glow: ${glowVar};`}
+>
+  {badge && (
+    <span
+      class="mb-[var(--space-3)] inline-block rounded-[var(--radius-sm)] px-2 py-0.5 text-xs font-semibold"
+      style="background-color: color-mix(in srgb, var(--glow) 12%, var(--color-surface)); color: var(--glow); border: 1px solid color-mix(in srgb, var(--glow) 25%, transparent);"
+    >
+      {badge}
+    </span>
+  )}
+
+  {icon && (
+    <div class="mb-[var(--space-4)] text-4xl" aria-hidden="true">
+      {icon}
+    </div>
+  )}
+  <slot name="icon" />
+
+  <h3
+    class="mb-[var(--space-2)] font-semibold"
+    style="color: var(--color-text); font-size: var(--text-lg);"
+  >
+    {title}
+  </h3>
+
+  <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">
+    {description}
+  </p>
+</Tag>
+
+<style>
+  .feature-card {
+    color: inherit;
+  }
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 24px color-mix(in srgb, var(--glow) 20%, transparent),
+                0 8px 32px color-mix(in srgb, var(--glow) 10%, transparent);
+    border-color: color-mix(in srgb, var(--glow) 40%, var(--color-border));
+    text-decoration: none;
+  }
+</style>

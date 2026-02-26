@@ -1,0 +1,77 @@
+---
+/** Shared HTML document shell with theme initialization, fonts, favicon, and meta tags. */
+export interface Props {
+  title: string;
+  description?: string;
+  extensionName: string;
+  canonicalUrl?: string;
+  ogImage?: string;
+}
+
+const {
+  title,
+  description = "An azd extension",
+  extensionName,
+  canonicalUrl,
+  ogImage,
+} = Astro.props;
+
+const themeColor = "#0a0a0f";
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark" style="color-scheme: dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content={themeColor} />
+
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    {ogImage && <meta property="og:image" content={ogImage} />}
+
+    <!-- Geist fonts via Google Fonts CDN -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&family=Geist+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <slot name="head" />
+
+    <!-- Theme init (runs before paint to prevent flash) -->
+    <script is:inline>
+      (function () {
+        const stored = localStorage.getItem("azd-theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const theme = stored || (prefersDark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.style.colorScheme = theme;
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", theme === "dark" ? "#0a0a0f" : "#fafafa");
+      })();
+    </script>
+  </head>
+  <body>
+    <a
+      href="#main-content"
+      class="fixed left-2 top-2 z-[100] -translate-y-16 rounded-[var(--radius-md)] px-4 py-2 text-sm font-semibold transition-transform focus:translate-y-0"
+      style="background-color: var(--color-primary); color: #ffffff;"
+    >
+      Skip to main content
+    </a>
+    <slot />
+  </body>
+</html>
