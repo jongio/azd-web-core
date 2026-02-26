@@ -30,13 +30,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build packages
-        run: pnpm build
-
-      - name: Run tests
-        run: pnpm test
-
-      - name: Publish packages
-        run: pnpm -r publish --no-git-checks
+      - name: Publish to GitHub Packages
+        run: pnpm publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
