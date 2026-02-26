@@ -6,6 +6,7 @@ export interface Props {
   extensionName: string;
   canonicalUrl?: string;
   ogImage?: string;
+  publishedDate?: string;
 }
 
 const {
@@ -14,6 +15,7 @@ const {
   extensionName,
   canonicalUrl,
   ogImage,
+  publishedDate,
 } = Astro.props;
 
 const themeColor = "#0a0a0f";
@@ -43,7 +45,7 @@ const themeColor = "#0a0a0f";
     {ogImage && <meta property="og:image:width" content="1200" />}
     {ogImage && <meta property="og:image:height" content="630" />}
     <meta property="article:author" content="https://www.linkedin.com/in/jongallant" />
-    <meta property="article:published_time" content="2025-02-01T00:00:00Z" />
+    <meta property="article:published_time" content={publishedDate || new Date().toISOString()} />
     <meta property="article:modified_time" content={new Date().toISOString()} />
     <meta name="author" content="Jon Gallant" />
 
