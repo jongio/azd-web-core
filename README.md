@@ -101,19 +101,17 @@ Consumer sites declare the dependency as a versioned package:
 "@jongio/azd-web-core": "^2.0.0"
 ```
 
-But for **local development**, each site uses a `pnpm.overrides` block in `package.json` to redirect to the local clone:
+For **local development**, link to your local clone instead of installing from the registry:
 
-```json
-"pnpm": {
-  "overrides": {
-    "@jongio/azd-web-core": "file:../../azd-web-core"
-  }
-}
+```bash
+# Run once per clone, from each consumer site's web/ directory
+pnpm link ../../azd-web-core
 ```
 
-This gives you:
-- **Local dev**: Instant refresh — edits to azd-web-core components are picked up immediately (after dev server restart)
-- **CI builds**: Pulls the published package from GitHub Packages — no need to clone azd-web-core alongside each site
+This creates a symlink so edits to azd-web-core components are picked up immediately (restart the dev server after changes).
+
+- **Local dev**: Uses the symlinked local clone — no publish needed
+- **CI builds**: Pulls the published package from GitHub Packages — no local clone required
 
 ### Automated Site Rebuilds
 
