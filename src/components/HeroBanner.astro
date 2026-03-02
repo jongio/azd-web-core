@@ -4,15 +4,22 @@ export interface CtaButton {
   href: string;
 }
 
-/** Hero section with gradient glow background and primary/secondary CTA buttons. */
+/**
+ * Hero section with gradient glow background and primary/secondary CTA buttons.
+ *
+ * **Security note:** `titleHtml` is rendered as raw HTML via Astro's `set:html`.
+ * Never pass unsanitized user input. This is intended for developer-authored
+ * markup such as `<span class="gradient-text">text</span>`.
+ */
 export interface Props {
-  title: string;
+  /** Raw HTML string for the hero title. Rendered unescaped — do not pass user input. */
+  titleHtml: string;
   subtitle?: string;
   primaryCta?: CtaButton;
   secondaryCta?: CtaButton;
 }
 
-const { title, subtitle, primaryCta, secondaryCta } = Astro.props;
+const { titleHtml, subtitle, primaryCta, secondaryCta } = Astro.props;
 ---
 
 <section class="relative overflow-hidden px-[var(--space-6)] py-[var(--space-20)] text-center">
@@ -28,7 +35,7 @@ const { title, subtitle, primaryCta, secondaryCta } = Astro.props;
       class="mb-[var(--space-4)] font-bold leading-tight"
       style="font-size: var(--text-3xl);"
     >
-      <Fragment set:html={title} />
+      <Fragment set:html={titleHtml} />
     </h1>
 
     {subtitle && (

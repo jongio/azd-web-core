@@ -58,22 +58,22 @@ const paddedNumber = String(number).padStart(2, "0");
 </div>
 
 <script>
-  let copying = false;
   document.querySelectorAll(".copy-btn").forEach((btn) => {
+    let copying = false;
     btn.addEventListener("click", async () => {
-      if (copying) return;
+      if (copying || !navigator.clipboard?.writeText) return;
       copying = true;
       const code = btn.getAttribute("data-code") || "";
       try {
         await navigator.clipboard.writeText(code);
         btn.setAttribute("aria-label", "Copied!");
-        setTimeout(() => {
-          btn.setAttribute("aria-label", "Copy command");
-          copying = false;
-        }, 2000);
       } catch {
-        copying = false;
+        btn.setAttribute("aria-label", "Copy failed");
       }
+      setTimeout(() => {
+        btn.setAttribute("aria-label", "Copy command");
+        copying = false;
+      }, 2000);
     });
   });
 </script>

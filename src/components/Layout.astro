@@ -12,11 +12,12 @@ export interface Props {
 const {
   title,
   description = "An azd extension",
-  extensionName,
+  extensionName: _extensionName,
   canonicalUrl,
   ogImage,
   publishedDate,
 } = Astro.props;
+void _extensionName; // Required prop for downstream components (part of public API)
 
 const themeColor = "#0a0a0f";
 ---
@@ -28,6 +29,7 @@ const themeColor = "#0a0a0f";
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content={themeColor} />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
 
     <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
 
@@ -69,12 +71,13 @@ const themeColor = "#0a0a0f";
     <!-- Theme init (runs before paint to prevent flash) -->
     <script is:inline>
       (function () {
-        const stored = localStorage.getItem("azd-theme");
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        const theme = stored || (prefersDark ? "dark" : "light");
+        var stored = null;
+        try { stored = localStorage.getItem("azd-theme"); } catch (e) { /* storage unavailable */ }
+        var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var theme = (stored === "dark" || stored === "light") ? stored : (prefersDark ? "dark" : "light");
         document.documentElement.setAttribute("data-theme", theme);
         document.documentElement.style.colorScheme = theme;
-        const meta = document.querySelector('meta[name="theme-color"]');
+        var meta = document.querySelector('meta[name="theme-color"]');
         if (meta) meta.setAttribute("content", theme === "dark" ? "#0a0a0f" : "#fafafa");
       })();
     </script>

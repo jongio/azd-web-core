@@ -55,6 +55,8 @@
 
 <script is:inline>
   (function initThemeToggle() {
+    var bound = typeof WeakSet !== "undefined" ? new WeakSet() : null;
+
     function updateToggleIcons() {
       var isDark = document.documentElement.getAttribute("data-theme") !== "light";
       document.querySelectorAll("[data-theme-toggle]").forEach(function(btn) {
@@ -68,8 +70,8 @@
 
     function attachListeners() {
       document.querySelectorAll("[data-theme-toggle]").forEach(function(btn) {
-        if (btn._themeToggleBound) return;
-        btn._themeToggleBound = true;
+        if (bound && bound.has(btn)) return;
+        if (bound) bound.add(btn);
         btn.addEventListener("click", function() {
           var html = document.documentElement;
           var current = html.getAttribute("data-theme") || "dark";
@@ -77,7 +79,7 @@
 
           html.setAttribute("data-theme", next);
           html.style.colorScheme = next;
-          localStorage.setItem("azd-theme", next);
+          try { localStorage.setItem("azd-theme", next); } catch (e) { /* storage unavailable */ }
 
           var meta = document.querySelector('meta[name="theme-color"]');
           if (meta) meta.setAttribute("content", next === "dark" ? "#0a0a0f" : "#fafafa");
