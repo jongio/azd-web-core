@@ -15,7 +15,8 @@ export interface Props {
 
 import ThemeToggle from "./ThemeToggle.astro";
 
-const { extensionName, navLinks = [], githubUrl, hubUrl } = Astro.props;
+const { extensionName, navLinks = [], githubUrl, hubUrl: _hubUrl } = Astro.props;
+void _hubUrl; // Reserved for future hub integration (part of public API)
 ---
 
 <header
@@ -150,7 +151,7 @@ const { extensionName, navLinks = [], githubUrl, hubUrl } = Astro.props;
   const menu = document.querySelector("[data-mobile-menu]");
   if (toggle && menu) {
     toggle.addEventListener("click", () => {
-      const open = menu.classList.toggle("hidden");
+      menu.classList.toggle("hidden");
       toggle.setAttribute("aria-expanded", String(!menu.classList.contains("hidden")));
       if (!menu.classList.contains("hidden")) {
         menu.classList.add("flex");

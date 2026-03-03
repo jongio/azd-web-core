@@ -13,6 +13,14 @@
   "files": [
     "src"
   ],
+  "scripts": {
+    "check": "astro check",
+    "lint": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "astro": "^5.18.0",
+    "typescript": "^5.8.3"
+  },
   "peerDependencies": {
     "astro": ">=5.0.0",
     "tailwindcss": ">=4.0.0"
@@ -24,5 +32,8 @@
   "license": "MIT",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.6"
   }
 }

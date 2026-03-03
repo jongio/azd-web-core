@@ -1,7 +1,8 @@
 ---
 export interface Tab {
   label: string;
-  icon?: string;
+  /** Raw SVG/HTML string for the tab icon. Rendered unescaped — do not pass user input. */
+  iconSvg?: string;
   commands: string[];
 }
 
@@ -11,7 +12,9 @@ export interface Props {
 }
 
 const { tabs } = Astro.props;
-const tabsId = `itabs-${Math.random().toString(36).slice(2, 8)}`;
+let _itabsCounter = (globalThis as Record<string, unknown>).__itabsCounter as number ?? 0;
+(globalThis as Record<string, unknown>).__itabsCounter = ++_itabsCounter;
+const tabsId = `itabs-${_itabsCounter}`;
 ---
 
 <div class="overflow-hidden rounded-[var(--radius-lg)]" style="background-color: color-mix(in srgb, var(--color-text) 6%, var(--color-background));">
@@ -35,7 +38,7 @@ const tabsId = `itabs-${Math.random().toString(36).slice(2, 8)}`;
           : "color: var(--color-text-muted); border-bottom: 2px solid transparent;"}
         data-tab-index={i}
       >
-        {tab.icon && <Fragment set:html={tab.icon} />}
+        {tab.iconSvg && <Fragment set:html={tab.iconSvg} />}
         {tab.label}
       </button>
     ))}
@@ -71,7 +74,8 @@ const tabsId = `itabs-${Math.random().toString(36).slice(2, 8)}`;
 <script>
   function initInstallTabs() {
     document.querySelectorAll("[data-install-tabs]").forEach((tablist) => {
-      const container = tablist.parentElement!;
+      const container = tablist.parentElement;
+      if (!container) return;
       const tabs = Array.from(tablist.querySelectorAll("[role='tab']"));
       const panels = container.querySelectorAll("[role='tabpanel']");
 
@@ -119,7 +123,7 @@ const tabsId = `itabs-${Math.random().toString(36).slice(2, 8)}`;
       let copying = false;
       const originalText = btn.textContent;
       btn.addEventListener("click", async () => {
-        if (copying) return;
+        if (copying || !navigator.clipboard?.writeText) return;
         copying = true;
         const text = (btn as HTMLElement).dataset.copy || "";
         try {

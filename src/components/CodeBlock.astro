@@ -51,7 +51,7 @@ const { code, lang = "shell", title, showCopy = true } = Astro.props;
     let copying = false;
     const originalText = btn.textContent;
     btn.addEventListener("click", async () => {
-      if (copying) return;
+      if (copying || !navigator.clipboard?.writeText) return;
       copying = true;
       const pre = btn.closest("div")?.querySelector("pre");
       const text = pre?.textContent || "";

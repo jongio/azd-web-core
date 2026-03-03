@@ -17,6 +17,7 @@ node_modules
 # Build outputs
 dist/
 *.tsbuildinfo
+.astro/
 
 # Coverage
 coverage/
