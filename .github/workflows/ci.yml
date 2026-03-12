@@ -3,12 +3,19 @@ name: CI
 on:
   push:
     branches: [main]
+    paths: ['src/**', 'package.json', 'pnpm-lock.yaml', '.github/workflows/ci.yml']
   pull_request:
     branches: [main]
+    paths: ['src/**', 'package.json', 'pnpm-lock.yaml', '.github/workflows/ci.yml']
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   check:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v4
