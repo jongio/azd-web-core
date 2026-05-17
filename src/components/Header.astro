@@ -165,6 +165,26 @@ void _hubUrl; // Reserved for future hub integration (part of public API)
         menu.classList.remove("flex");
         toggle.setAttribute("aria-expanded", "false");
         (toggle as HTMLElement).focus();
+        return;
+      }
+      // Focus trap: keep Tab cycling within the mobile menu when open
+      if (e.key === "Tab" && !menu.classList.contains("hidden")) {
+        const focusable = [
+          toggle as HTMLElement,
+          ...Array.from(menu.querySelectorAll<HTMLElement>(
+            'a[href], button, [tabindex]:not([tabindex="-1"])'
+          )),
+        ];
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     });
   }
