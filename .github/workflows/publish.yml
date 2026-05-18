@@ -44,6 +44,15 @@ jobs:
             exit 1
           fi
 
+      - name: Astro check
+        run: pnpm check
+
+      - name: Type check
+        run: pnpm typecheck
+
+      - name: Build
+        run: pnpm build
+
       - name: Publish to GitHub Packages
         run: pnpm publish --no-git-checks --provenance
         env:
