@@ -63,4 +63,9 @@ const glowVar = (glowColor && safeColorPattern.test(glowColor)) ? glowColor : "v
     border-color: color-mix(in srgb, var(--glow) 40%, var(--color-border));
     text-decoration: none;
   }
+  .feature-card:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-color: color-mix(in srgb, var(--glow) 40%, var(--color-border));
+  }
 </style>
