@@ -29,14 +29,14 @@ const { code, lang = "shell", title, showCopy = true } = Astro.props;
 
   <div class="relative">
     <pre
-      class="overflow-x-auto px-[var(--space-4)] py-[var(--space-3)] text-[13px] leading-relaxed"
-      style="color: var(--color-text); font-family: var(--font-mono); margin: 0;"
+      class="overflow-x-auto px-[var(--space-4)] py-[var(--space-3)] leading-relaxed"
+      style="color: var(--color-text); font-family: var(--font-mono); font-size: var(--text-xs); margin: 0;"
     ><code data-lang={lang}>{code}</code></pre>
 
     {showCopy && (
       <button
-        class="absolute right-2 top-2 rounded-md px-2 py-0.5 text-[11px] opacity-60 transition-opacity hover:opacity-100"
-        style="background-color: var(--color-surface); color: var(--color-text-muted); border: 1px solid var(--color-border);"
+        class="absolute right-[var(--space-2)] top-[var(--space-2)] rounded-md px-[var(--space-2)] py-0.5 opacity-60 transition-opacity hover:opacity-100"
+        style="background-color: var(--color-surface); color: var(--color-text-muted); border: 1px solid var(--color-border); font-size: 0.6875rem;"
         aria-label="Copy code to clipboard"
         data-copy-code
       >

@@ -69,6 +69,9 @@
   --z-header: 50;
   --z-overlay: 40;
   --z-dropdown: 30;
+
+  /* ---- Theme meta color ---- */
+  --color-theme-meta: #0a0a0f;
 }
 
 /* ---- Colors: Light ---- */
@@ -91,4 +94,6 @@
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04);
   --shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.12);
   --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.08);
+
+  --color-theme-meta: #fafafa;
 }
