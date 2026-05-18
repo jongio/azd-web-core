@@ -18,11 +18,29 @@ export const colors = {
   text: "var(--color-text)",
   "text-muted": "var(--color-text-muted)",
   border: "var(--color-border)",
+  "cta-start": "var(--color-cta-start)",
+  "cta-end": "var(--color-cta-end)",
 } as const;
 
 export const fontFamily = {
   sans: "var(--font-sans)",
   mono: "var(--font-mono)",
+} as const;
+
+export const fontSize = {
+  xs: "var(--text-xs)",
+  sm: "var(--text-sm)",
+  base: "var(--text-base)",
+  lg: "var(--text-lg)",
+  xl: "var(--text-xl)",
+  "2xl": "var(--text-2xl)",
+  "3xl": "var(--text-3xl)",
+} as const;
+
+export const fontWeight = {
+  normal: "var(--font-weight-normal)",
+  semibold: "var(--font-weight-semibold)",
+  bold: "var(--font-weight-bold)",
 } as const;
 
 export const borderRadius = {
@@ -51,12 +69,28 @@ export const boxShadow = {
   lg: "var(--shadow-lg)",
 } as const;
 
+export const transitionDuration = {
+  fast: "var(--transition-fast)",
+  normal: "var(--transition-normal)",
+  slow: "var(--transition-slow)",
+} as const;
+
+export const zIndex = {
+  header: "var(--z-header)",
+  overlay: "var(--z-overlay)",
+  dropdown: "var(--z-dropdown)",
+} as const;
+
 const preset = {
   colors,
   fontFamily,
+  fontSize,
+  fontWeight,
   borderRadius,
   spacing,
   boxShadow,
+  transitionDuration,
+  zIndex,
 } as const;
 
 export default preset;

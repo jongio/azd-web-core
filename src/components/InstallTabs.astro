@@ -32,10 +32,10 @@ const tabsId = `itabs-${_itabsCounter}`;
         aria-selected={i === 0 ? "true" : "false"}
         aria-controls={`${tabsId}-panel-${i}`}
         tabindex={i === 0 ? 0 : -1}
-        class="inline-flex items-center gap-1.5 whitespace-nowrap px-[var(--space-4)] py-2.5 text-[13px] font-semibold transition-colors"
-        style={i === 0
+        class="inline-flex items-center gap-1.5 whitespace-nowrap px-[var(--space-4)] py-[var(--space-2)] font-semibold transition-colors"
+        style={`font-size: var(--text-xs); ${i === 0
           ? "color: var(--color-primary); border-bottom: 2px solid var(--color-primary);"
-          : "color: var(--color-text-muted); border-bottom: 2px solid transparent;"}
+          : "color: var(--color-text-muted); border-bottom: 2px solid transparent;"}`}
         data-tab-index={i}
       >
         {tab.iconSvg && <Fragment set:html={tab.iconSvg} />}
@@ -56,12 +56,12 @@ const tabsId = `itabs-${_itabsCounter}`;
     >
       <div class="relative px-[var(--space-4)] py-[var(--space-3)]">
         <pre
-          class="overflow-x-auto text-[13px] leading-relaxed"
-          style="color: var(--color-text); font-family: var(--font-mono); margin: 0;"
+          class="overflow-x-auto leading-relaxed"
+          style="color: var(--color-text); font-family: var(--font-mono); font-size: var(--text-xs); margin: 0;"
         ><code>{tab.commands.join("\n")}</code></pre>
         <button
-          class="absolute right-3 top-3 rounded-md px-2 py-0.5 text-[11px] opacity-60 transition-opacity hover:opacity-100"
-          style="background-color: var(--color-surface); color: var(--color-text-muted); border: 1px solid var(--color-border);"
+          class="absolute right-[var(--space-3)] top-[var(--space-3)] rounded-md px-[var(--space-2)] py-0.5 opacity-60 transition-opacity hover:opacity-100"
+          style="background-color: var(--color-surface); color: var(--color-text-muted); border: 1px solid var(--color-border); font-size: 0.6875rem;"
           aria-label={`Copy ${tab.label} commands`}
           data-copy={tab.commands.join("\n")}
         >

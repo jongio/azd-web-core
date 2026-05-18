@@ -64,6 +64,11 @@ code:not(pre code) {
 }
 
 /* ---- Scrollbar ---- */
+* {
+  scrollbar-color: var(--color-border) var(--color-background);
+  scrollbar-width: thin;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
