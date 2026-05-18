@@ -47,21 +47,18 @@ const { code, lang = "shell", title, showCopy = true } = Astro.props;
 </div>
 
 <script>
-  document.querySelectorAll("[data-copy-code]").forEach((btn) => {
-    let copying = false;
-    const originalText = btn.textContent;
-    btn.addEventListener("click", async () => {
-      if (copying || !navigator.clipboard?.writeText) return;
-      copying = true;
-      const pre = btn.closest("div")?.querySelector("pre");
-      const text = pre?.textContent || "";
-      try {
-        await navigator.clipboard.writeText(text);
-        btn.textContent = "Copied!";
-      } catch {
-        btn.textContent = "Error";
-      }
-      setTimeout(() => { btn.textContent = originalText; copying = false; }, 1500);
+  import { initClipboardButtons } from "../utils/clipboard";
+
+  let controller: AbortController | null = null;
+
+  function setup() {
+    controller?.abort();
+    controller = initClipboardButtons(document, {
+      selector: "[data-copy-code]",
+      getText: (btn) => btn.closest("div")?.querySelector("pre")?.textContent || "",
     });
-  });
+  }
+
+  setup();
+  document.addEventListener("astro:page-load", setup);
 </script>

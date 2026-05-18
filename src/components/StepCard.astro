@@ -58,22 +58,22 @@ const paddedNumber = String(number).padStart(2, "0");
 </div>
 
 <script>
-  document.querySelectorAll(".copy-btn").forEach((btn) => {
-    let copying = false;
-    btn.addEventListener("click", async () => {
-      if (copying || !navigator.clipboard?.writeText) return;
-      copying = true;
-      const code = btn.getAttribute("data-code") || "";
-      try {
-        await navigator.clipboard.writeText(code);
-        btn.setAttribute("aria-label", "Copied!");
-      } catch {
-        btn.setAttribute("aria-label", "Copy failed");
-      }
-      setTimeout(() => {
-        btn.setAttribute("aria-label", "Copy command");
-        copying = false;
-      }, 2000);
+  import { initClipboardButtons } from "../utils/clipboard";
+
+  let controller: AbortController | null = null;
+
+  function setup() {
+    controller?.abort();
+    controller = initClipboardButtons(document, {
+      selector: ".copy-btn[data-code]",
+      getText: (btn) => btn.getAttribute("data-code") || "",
+      onSuccess: (btn) => btn.setAttribute("aria-label", "Copied!"),
+      onError: (btn) => btn.setAttribute("aria-label", "Copy failed"),
+      onReset: (btn) => btn.setAttribute("aria-label", "Copy command"),
+      resetDelay: 2000,
     });
-  });
+  }
+
+  setup();
+  document.addEventListener("astro:page-load", setup);
 </script>
