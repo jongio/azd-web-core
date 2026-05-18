@@ -55,13 +55,13 @@
 
 <script is:inline>
   (function initThemeToggle() {
-    var bound = typeof WeakSet !== "undefined" ? new WeakSet() : null;
+    const bound = typeof WeakSet !== "undefined" ? new WeakSet() : null;
 
     function updateToggleIcons() {
-      var isDark = document.documentElement.getAttribute("data-theme") !== "light";
+      const isDark = document.documentElement.getAttribute("data-theme") !== "light";
       document.querySelectorAll("[data-theme-toggle]").forEach(function(btn) {
-        var moon = btn.querySelector('[data-icon="moon"]');
-        var sun = btn.querySelector('[data-icon="sun"]');
+        const moon = btn.querySelector('[data-icon="moon"]');
+        const sun = btn.querySelector('[data-icon="sun"]');
         if (moon) moon.style.display = isDark ? "block" : "none";
         if (sun) sun.style.display = isDark ? "none" : "block";
         btn.setAttribute("aria-label", isDark ? "Switch to light theme" : "Switch to dark theme");
@@ -73,15 +73,15 @@
         if (bound && bound.has(btn)) return;
         if (bound) bound.add(btn);
         btn.addEventListener("click", function() {
-          var html = document.documentElement;
-          var current = html.getAttribute("data-theme") || "dark";
-          var next = current === "dark" ? "light" : "dark";
+          const html = document.documentElement;
+          const current = html.getAttribute("data-theme") || "dark";
+          const next = current === "dark" ? "light" : "dark";
 
           html.setAttribute("data-theme", next);
           html.style.colorScheme = next;
-          try { localStorage.setItem("azd-theme", next); } catch (e) { /* storage unavailable */ }
+          try { localStorage.setItem("azd-theme", next); } catch { /* storage unavailable */ }
 
-          var meta = document.querySelector('meta[name="theme-color"]');
+          const meta = document.querySelector('meta[name="theme-color"]');
           if (meta) meta.setAttribute("content", next === "dark" ? "#0a0a0f" : "#fafafa");
 
           updateToggleIcons();

@@ -138,9 +138,5 @@ const tabsId = `itabs-${_itabsCounter}`;
     });
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initInstallTabs);
-  } else {
-    initInstallTabs();
-  }
+  initInstallTabs();
 </script>
