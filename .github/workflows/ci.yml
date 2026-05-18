@@ -37,8 +37,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Lint
+        run: pnpm lint
+
       - name: Astro check
         run: pnpm check
 
       - name: Type check
-        run: pnpm lint
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
