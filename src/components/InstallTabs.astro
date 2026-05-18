@@ -50,6 +50,7 @@ const tabsId = `itabs-${_itabsCounter}`;
       id={`${tabsId}-panel-${i}`}
       role="tabpanel"
       aria-labelledby={`${tabsId}-tab-${i}`}
+      tabindex="0"
       class={i === 0 ? "block" : "hidden"}
       data-panel-index={i}
     >

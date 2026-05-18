@@ -50,23 +50,23 @@ const year = new Date().getFullYear();
     </div>
 
     <!-- Column 2: Resources -->
-    <div>
+    <nav aria-label="Resources">
       <h4 class="mb-[var(--space-3)] text-sm font-semibold" style="color: var(--color-text);">Resources</h4>
       <ul class="flex flex-col gap-[var(--space-2)]">
         <li><a href={`${githubUrl}#readme`} class="text-sm" style="color: var(--color-text-muted);">Documentation</a></li>
         <li><a href={githubUrl} target="_blank" rel="noopener noreferrer" class="text-sm" style="color: var(--color-text-muted);">GitHub</a></li>
         <li><a href={`${githubUrl}/blob/main/CHANGELOG.md`} class="text-sm" style="color: var(--color-text-muted);">Changelog</a></li>
       </ul>
-    </div>
+    </nav>
 
     <!-- Column 3: Community -->
-    <div>
+    <nav aria-label="Community">
       <h4 class="mb-[var(--space-3)] text-sm font-semibold" style="color: var(--color-text);">Community</h4>
       <ul class="flex flex-col gap-[var(--space-2)]">
         <li><a href={`${githubUrl}/issues`} target="_blank" rel="noopener noreferrer" class="text-sm" style="color: var(--color-text-muted);">Issues</a></li>
         <li><a href={`${githubUrl}/blob/main/CONTRIBUTING.md`} class="text-sm" style="color: var(--color-text-muted);">Contributing</a></li>
       </ul>
-    </div>
+    </nav>
   </div>
 
   <!-- Bottom bar -->

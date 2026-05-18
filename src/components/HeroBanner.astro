@@ -53,7 +53,7 @@ const { titleHtml, subtitle, primaryCta, secondaryCta } = Astro.props;
           <a
             href={primaryCta.href}
             class="cta-primary inline-flex items-center rounded-[var(--radius-md)] px-6 py-3 text-sm font-semibold transition-[background,filter] duration-200 hover:no-underline hover:brightness-110"
-            style="background: linear-gradient(135deg, var(--color-primary), var(--color-accent)); color: #ffffff !important; box-shadow: 0 0 20px color-mix(in srgb, var(--color-primary) 30%, transparent);"
+            style="background: linear-gradient(135deg, var(--color-cta-start), var(--color-cta-end)); color: #ffffff !important; box-shadow: 0 0 20px color-mix(in srgb, var(--color-primary) 30%, transparent);"
           >
             {primaryCta.label}
           </a>

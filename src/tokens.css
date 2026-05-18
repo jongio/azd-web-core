@@ -17,6 +17,10 @@
   --color-text-muted: #8a8a93;
   --color-border: #27272a;
 
+  /* CTA gradient (meets WCAG 4.5:1 contrast with white text) */
+  --color-cta-start: #0369a1;
+  --color-cta-end: #6d28d9;
+
   /* ---- Typography ---- */
   --font-sans: "Geist Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
@@ -80,6 +84,9 @@
   --color-text: #18181b;
   --color-text-muted: #71717a;
   --color-border: #e4e4e7;
+
+  --color-cta-start: #0369a1;
+  --color-cta-end: #6d28d9;
 
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04);
   --shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.12);
