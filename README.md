@@ -40,7 +40,7 @@ import FeatureCard from "@jongio/azd-web-core/components/FeatureCard.astro";
 <Layout title="My Extension" extensionName="my-ext">
   <Header extensionName="my-ext" githubUrl="https://github.com/org/repo" />
   <HeroBanner
-    title='Build with <span class="gradient-text">azd</span>'
+    titleHtml='Build with <span class="gradient-text">azd</span>'
     subtitle="A developer extension for the Azure Developer CLI."
     primaryCta={{ label: "Get Started", href: "#install" }}
   />

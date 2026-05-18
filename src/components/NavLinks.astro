@@ -1,0 +1,39 @@
+---
+export interface NavLink {
+  label: string;
+  href: string;
+  badge?: string;
+}
+
+export interface Props {
+  links: NavLink[];
+}
+
+const { links } = Astro.props;
+---
+
+{links.map((link) => (
+  <a
+    href={link.href}
+    class="nav-link text-sm transition-colors hover:no-underline"
+  >
+    {link.label}
+    {link.badge && (
+      <span
+        class="ml-1 inline-block rounded-[var(--radius-sm)] px-1.5 py-0.5 text-xs font-semibold"
+        style="background-color: var(--color-surface-2); color: var(--color-primary);"
+      >
+        {link.badge}
+      </span>
+    )}
+  </a>
+))}
+
+<style>
+  .nav-link {
+    color: var(--color-text-muted);
+  }
+  .nav-link:hover {
+    color: var(--color-text);
+  }
+</style>

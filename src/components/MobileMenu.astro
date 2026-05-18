@@ -1,0 +1,43 @@
+---
+import type { NavLink } from "./NavLinks.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+import SocialLinks from "./SocialLinks.astro";
+
+export interface Props {
+  navLinks: NavLink[];
+  githubUrl: string;
+}
+
+const { navLinks, githubUrl } = Astro.props;
+---
+
+<nav
+  class="hidden flex-col gap-[var(--space-2)] border-t px-[var(--space-6)] py-[var(--space-4)] md:hidden"
+  style="border-color: var(--color-border); background-color: var(--color-surface);"
+  data-mobile-menu
+  aria-label="Mobile navigation"
+>
+  {navLinks.map((link) => (
+    <a href={link.href} class="mobile-link block py-1 text-sm">
+      {link.label}
+      {link.badge && (
+        <span
+          class="ml-1 inline-block rounded-[var(--radius-sm)] px-1.5 py-0.5 text-xs font-semibold"
+          style="background-color: var(--color-surface-2); color: var(--color-primary);"
+        >
+          {link.badge}
+        </span>
+      )}
+    </a>
+  ))}
+  <div class="flex items-center gap-[var(--space-4)] pt-2">
+    <ThemeToggle />
+    <SocialLinks githubUrl={githubUrl} variant="mobile" />
+  </div>
+</nav>
+
+<style>
+  .mobile-link {
+    color: var(--color-text-muted);
+  }
+</style>

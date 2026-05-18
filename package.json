@@ -14,7 +14,8 @@
     "./base.css": "./src/base.css",
     "./tailwind-preset": "./src/tailwind-preset.ts",
     "./components/*": "./src/components/*",
-    "./utils/clipboard": "./src/utils/clipboard.ts"
+    "./utils/clipboard": "./src/utils/clipboard.ts",
+    "./config": "./src/config.ts"
   },
   "files": [
     "src"
