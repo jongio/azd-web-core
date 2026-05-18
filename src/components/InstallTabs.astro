@@ -1,7 +1,7 @@
 ---
 export interface Tab {
   label: string;
-  /** Raw SVG/HTML string for the tab icon. Rendered unescaped — do not pass user input. */
+  /** Raw SVG/HTML string for the tab icon. Rendered unescaped - do not pass user input. */
   iconSvg?: string;
   commands: string[];
 }
@@ -73,7 +73,17 @@ const tabsId = `itabs-${_itabsCounter}`;
 </div>
 
 <script>
+  import { initClipboardButtons } from "../utils/clipboard";
+
+  let tabController: AbortController | null = null;
+  let copyController: AbortController | null = null;
+
   function initInstallTabs() {
+    tabController?.abort();
+    copyController?.abort();
+    tabController = new AbortController();
+    const { signal } = tabController;
+
     document.querySelectorAll("[data-install-tabs]").forEach((tablist) => {
       const container = tablist.parentElement;
       if (!container) return;
@@ -82,61 +92,56 @@ const tabsId = `itabs-${_itabsCounter}`;
 
       function activateTab(tab: Element) {
         const index = (tab as HTMLElement).dataset.tabIndex;
-        tabs.forEach((t) => {
-          const el = t as HTMLElement;
-          el.setAttribute("aria-selected", "false");
-          el.setAttribute("tabindex", "-1");
-          el.style.color = "var(--color-text-muted)";
-          el.style.borderBottom = "2px solid transparent";
-        });
-        (tab as HTMLElement).setAttribute("aria-selected", "true");
-        (tab as HTMLElement).setAttribute("tabindex", "0");
-        (tab as HTMLElement).style.color = "var(--color-primary)";
-        (tab as HTMLElement).style.borderBottom = "2px solid var(--color-primary)";
-        (tab as HTMLElement).focus();
-        panels.forEach((p) => {
-          const el = p as HTMLElement;
-          el.classList.toggle("hidden", el.dataset.panelIndex !== index);
-          el.classList.toggle("block", el.dataset.panelIndex === index);
+
+        // Batch DOM writes in a single rAF to avoid layout thrashing (#60)
+        requestAnimationFrame(() => {
+          tabs.forEach((t) => {
+            const el = t as HTMLElement;
+            el.setAttribute("aria-selected", "false");
+            el.setAttribute("tabindex", "-1");
+            el.style.cssText = "color: var(--color-text-muted); border-bottom: 2px solid transparent;";
+          });
+          const active = tab as HTMLElement;
+          active.setAttribute("aria-selected", "true");
+          active.setAttribute("tabindex", "0");
+          active.style.cssText = "color: var(--color-primary); border-bottom: 2px solid var(--color-primary);";
+          active.focus();
+          panels.forEach((p) => {
+            const el = p as HTMLElement;
+            const isTarget = el.dataset.panelIndex === index;
+            el.classList.toggle("hidden", !isTarget);
+            el.classList.toggle("block", isTarget);
+          });
         });
       }
 
       tabs.forEach((tab) => {
-        tab.addEventListener("click", () => activateTab(tab));
+        tab.addEventListener("click", () => activateTab(tab), { signal });
       });
 
       tablist.addEventListener("keydown", (e: Event) => {
         const event = e as KeyboardEvent;
         const current = tabs.findIndex((t) => t.getAttribute("aria-selected") === "true");
+        // Fallback to 0 when no tab has aria-selected (#86)
+        const safeCurrent = current === -1 ? 0 : current;
         let next: number | null = null;
-        if (event.key === "ArrowRight") next = (current + 1) % tabs.length;
-        else if (event.key === "ArrowLeft") next = (current - 1 + tabs.length) % tabs.length;
+        if (event.key === "ArrowRight") next = (safeCurrent + 1) % tabs.length;
+        else if (event.key === "ArrowLeft") next = (safeCurrent - 1 + tabs.length) % tabs.length;
         else if (event.key === "Home") next = 0;
         else if (event.key === "End") next = tabs.length - 1;
         if (next !== null) {
           event.preventDefault();
           activateTab(tabs[next]);
         }
-      });
+      }, { signal });
     });
 
-    document.querySelectorAll("[data-copy]").forEach((btn) => {
-      let copying = false;
-      const originalText = btn.textContent;
-      btn.addEventListener("click", async () => {
-        if (copying || !navigator.clipboard?.writeText) return;
-        copying = true;
-        const text = (btn as HTMLElement).dataset.copy || "";
-        try {
-          await navigator.clipboard.writeText(text);
-          btn.textContent = "Copied!";
-        } catch {
-          btn.textContent = "Error";
-        }
-        setTimeout(() => { btn.textContent = originalText; copying = false; }, 1500);
-      });
+    copyController = initClipboardButtons(document, {
+      selector: "[data-copy]",
+      getText: (btn) => (btn as HTMLElement).dataset.copy || "",
     });
   }
 
   initInstallTabs();
+  document.addEventListener("astro:page-load", initInstallTabs);
 </script>

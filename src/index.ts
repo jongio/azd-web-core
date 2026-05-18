@@ -30,3 +30,7 @@ export const components = {
 // Tailwind preset re-export
 export { default as tailwindPreset } from "./tailwind-preset.ts";
 export * from "./tailwind-preset.ts";
+
+// Utilities
+export { initClipboardButtons } from "./utils/clipboard.ts";
+export type { ClipboardButtonOptions } from "./utils/clipboard.ts";

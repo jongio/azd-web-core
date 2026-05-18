@@ -147,47 +147,59 @@ void _hubUrl; // Reserved for future hub integration (part of public API)
 </header>
 
 <script>
-  const toggle = document.querySelector("[data-menu-toggle]");
-  const menu = document.querySelector("[data-mobile-menu]");
-  if (toggle && menu) {
-    toggle.addEventListener("click", () => {
-      menu.classList.toggle("hidden");
-      toggle.setAttribute("aria-expanded", String(!menu.classList.contains("hidden")));
-      if (!menu.classList.contains("hidden")) {
-        menu.classList.add("flex");
-      } else {
-        menu.classList.remove("flex");
-      }
-    });
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && !menu.classList.contains("hidden")) {
-        menu.classList.add("hidden");
-        menu.classList.remove("flex");
-        toggle.setAttribute("aria-expanded", "false");
-        (toggle as HTMLElement).focus();
-        return;
-      }
-      // Focus trap: keep Tab cycling within the mobile menu when open
-      if (e.key === "Tab" && !menu.classList.contains("hidden")) {
-        const focusable = [
-          toggle as HTMLElement,
-          ...Array.from(menu.querySelectorAll<HTMLElement>(
-            'a[href], button, [tabindex]:not([tabindex="-1"])'
-          )),
-        ];
-        if (focusable.length === 0) return;
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
+  let controller: AbortController | null = null;
+
+  function initHeader() {
+    controller?.abort();
+    controller = new AbortController();
+    const { signal } = controller;
+
+    const toggle = document.querySelector("[data-menu-toggle]");
+    const menu = document.querySelector("[data-mobile-menu]");
+    if (toggle && menu) {
+      toggle.addEventListener("click", () => {
+        menu.classList.toggle("hidden");
+        toggle.setAttribute("aria-expanded", String(!menu.classList.contains("hidden")));
+        if (!menu.classList.contains("hidden")) {
+          menu.classList.add("flex");
+        } else {
+          menu.classList.remove("flex");
         }
-      }
-    });
+      }, { signal });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && !menu.classList.contains("hidden")) {
+          menu.classList.add("hidden");
+          menu.classList.remove("flex");
+          toggle.setAttribute("aria-expanded", "false");
+          (toggle as HTMLElement).focus();
+          return;
+        }
+        // Focus trap: keep Tab cycling within the mobile menu when open
+        if (e.key === "Tab" && !menu.classList.contains("hidden")) {
+          const focusable = [
+            toggle as HTMLElement,
+            ...Array.from(menu.querySelectorAll<HTMLElement>(
+              'a[href], button, [tabindex]:not([tabindex="-1"])'
+            )),
+          ];
+          if (focusable.length === 0) return;
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }, { signal });
+    }
   }
+
+  initHeader();
+  document.addEventListener("astro:page-load", initHeader);
 </script>
 
 <style>

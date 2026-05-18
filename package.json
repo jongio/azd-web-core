@@ -9,7 +9,8 @@
     "./tokens.css": "./src/tokens.css",
     "./base.css": "./src/base.css",
     "./tailwind-preset": "./src/tailwind-preset.ts",
-    "./components/*": "./src/components/*"
+    "./components/*": "./src/components/*",
+    "./utils/clipboard": "./src/utils/clipboard.ts"
   },
   "files": [
     "src"
