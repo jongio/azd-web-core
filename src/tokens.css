@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Design Tokens — "Developer Terminal" theme
+   Design Tokens: "Developer Terminal" theme
    Dark is the default. Light overrides via [data-theme="light"].
    ========================================================================== */
 
@@ -21,21 +21,42 @@
   --color-cta-start: #0369a1;
   --color-cta-end: #6d28d9;
 
-  /* ---- Typography ---- */
-  --font-sans: "Geist Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-  --font-weight-normal: 400;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
+  /* ---- Typography ----
+     All type tokens are namespaced `--azd-*`.
 
-  /* Type scale (1.25 ratio) */
-  --text-xs: 0.875rem;
-  --text-sm: 1rem;
-  --text-base: 1.25rem;
-  --text-lg: 1.5rem;
-  --text-xl: 2rem;
-  --text-2xl: 2.5rem;
-  --text-3xl: 3rem;
+     Do NOT name these `--text-*`, `--font-sans`, `--font-mono`, or `--spacing`.
+     Those are Tailwind v4's own theme variables: it generates `text-xl`,
+     `font-sans`, `p-4` etc. directly from them. Redefining them silently
+     rewrites every Tailwind utility on every consuming site, and because
+     Tailwind derives each `--text-N--line-height` from its ORIGINAL size,
+     overriding only the size leaves every line-height mismatched.
+     Namespacing keeps the two scales independent. */
+  --azd-font-sans: "Geist Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --azd-font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --azd-font-weight-normal: 400;
+  --azd-font-weight-medium: 500;
+  --azd-font-weight-semibold: 600;
+  --azd-font-weight-bold: 700;
+
+  /* Type scale (1.25 ratio). Every step pairs a size with a line height;
+     larger type needs proportionally tighter leading. */
+  --azd-text-xs: 0.875rem;
+  --azd-text-sm: 1rem;
+  --azd-text-base: 1.25rem;
+  --azd-text-lg: 1.5rem;
+  --azd-text-xl: 2rem;
+  --azd-text-2xl: 2.5rem;
+  --azd-text-3xl: 3rem;
+  --azd-text-4xl: 3.75rem;
+
+  --azd-leading-xs: 1.5;
+  --azd-leading-sm: 1.5;
+  --azd-leading-base: 1.6;
+  --azd-leading-lg: 1.45;
+  --azd-leading-xl: 1.3;
+  --azd-leading-2xl: 1.25;
+  --azd-leading-3xl: 1.15;
+  --azd-leading-4xl: 1.05;
 
   /* ---- Spacing (base 4px) ---- */
   --space-1: 4px;

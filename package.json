@@ -1,6 +1,6 @@
 {
   "name": "@jongio/azd-web-core",
-  "version": "2.4.1",
+  "version": "3.0.0",
   "description": "Shared Astro components, design tokens, and Tailwind preset for azd extension websites",
   "type": "module",
   "packageManager": "pnpm@11.18.0",
@@ -17,27 +17,34 @@
     "./utils/clipboard": "./src/utils/clipboard.ts"
   },
   "files": [
-    "src"
+    "src",
+    "!src/**/*.test.ts"
   ],
   "scripts": {
     "build": "tsc --noEmit",
     "check": "astro check",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@eslint/js": "^10.0.1",
+    "@types/jsdom": "^28.0.3",
+    "@types/node": "^26.1.2",
     "@typescript/native": "npm:typescript@^7.0.2",
+    "@vitest/coverage-v8": "^4.1.10",
     "astro": "^7.1.6",
     "eslint": "^10.8.0",
     "eslint-plugin-astro": "^3.1.0",
+    "jsdom": "^30.0.1",
     "tailwindcss": "^4.3.3",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
     "typescript-eslint": "^8.65.0",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "yaml": "^2.9.0"
   },
   "peerDependencies": {
     "astro": "^5.0.0 || ^6.0.0 || ^7.0.0",
@@ -50,5 +57,8 @@
   "license": "MIT",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
+  },
+  "dependencies": {
+    "@lucide/astro": "^1.27.0"
   }
 }

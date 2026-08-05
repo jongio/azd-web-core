@@ -12,7 +12,7 @@ export interface CtaButton {
  * markup such as `<span class="gradient-text">text</span>`.
  */
 export interface Props {
-  /** Raw HTML string for the hero title. Rendered unescaped — do not pass user input. */
+  /** Raw HTML string for the hero title. Rendered unescaped, so do not pass user input. */
   titleHtml: string;
   subtitle?: string;
   primaryCta?: CtaButton;
@@ -20,6 +20,14 @@ export interface Props {
 }
 
 const { titleHtml, subtitle, primaryCta, secondaryCta } = Astro.props;
+
+if (!titleHtml || !String(titleHtml).trim()) {
+  throw new Error(
+    'HeroBanner: `titleHtml` is required and must be non-empty. ' +
+      'A blank hero heading is invalid for SEO and accessibility. ' +
+      'Note the prop is `titleHtml`, not `title`.'
+  );
+}
 ---
 
 <section class="relative overflow-hidden px-[var(--space-6)] py-[var(--space-20)] text-center">
@@ -33,7 +41,7 @@ const { titleHtml, subtitle, primaryCta, secondaryCta } = Astro.props;
   <div class="relative mx-auto max-w-3xl">
     <h1
       class="mb-[var(--space-4)] font-bold leading-tight"
-      style="font-size: clamp(var(--text-xl), 5vw + 1rem, var(--text-3xl));"
+      style="font-size: clamp(var(--azd-text-xl), 5vw + 1rem, var(--azd-text-3xl));"
     >
       <Fragment set:html={titleHtml} />
     </h1>
@@ -41,7 +49,7 @@ const { titleHtml, subtitle, primaryCta, secondaryCta } = Astro.props;
     {subtitle && (
       <p
         class="mx-auto mb-[var(--space-8)] max-w-2xl leading-relaxed"
-        style="color: var(--color-text-muted); font-size: var(--text-base);"
+        style="color: var(--color-text-muted); font-size: var(--azd-text-base);"
       >
         {subtitle}
       </p>

@@ -1,0 +1,313 @@
+---
+/**
+ * Shared icon component backed by Lucide.
+ *
+ * Exists so sites can render an icon from a *string* name. Data files across the
+ * consuming sites (agents.ts, extensions.ts, tour steps) store their icon as a
+ * serializable field, so they cannot hold an imported Astro component. Importing
+ * every Lucide icon individually at each call site would also scatter the icon
+ * vocabulary across four repos, which is exactly the design drift this package
+ * exists to prevent.
+ *
+ * The registry below is the single approved icon vocabulary. Adding an icon is a
+ * deliberate one-line change here rather than an ad-hoc import in a site.
+ *
+ * Unknown names fail loudly at build time instead of rendering an empty box,
+ * because a silently missing icon is the same class of defect as the emoji this
+ * component replaces: it looks fine to the author and broken to the visitor.
+ */
+import Accessibility from "@lucide/astro/icons/accessibility";
+import Archive from "@lucide/astro/icons/archive";
+import Atom from "@lucide/astro/icons/atom";
+import Blocks from "@lucide/astro/icons/blocks";
+import Book from "@lucide/astro/icons/book";
+import BookMarked from "@lucide/astro/icons/book-marked";
+import BookOpen from "@lucide/astro/icons/book-open";
+import Bot from "@lucide/astro/icons/bot";
+import Brain from "@lucide/astro/icons/brain";
+import Brush from "@lucide/astro/icons/brush";
+import Bug from "@lucide/astro/icons/bug";
+import ChartColumn from "@lucide/astro/icons/chart-column";
+import Check from "@lucide/astro/icons/check";
+import CircleCheck from "@lucide/astro/icons/circle-check";
+import CircleX from "@lucide/astro/icons/circle-x";
+import ClipboardList from "@lucide/astro/icons/clipboard-list";
+import Clock from "@lucide/astro/icons/clock";
+import Cloud from "@lucide/astro/icons/cloud";
+import Code from "@lucide/astro/icons/code";
+import Container from "@lucide/astro/icons/container";
+import Database from "@lucide/astro/icons/database";
+import DollarSign from "@lucide/astro/icons/dollar-sign";
+import Drama from "@lucide/astro/icons/drama";
+import Eye from "@lucide/astro/icons/eye";
+import FileCode from "@lucide/astro/icons/file-code";
+import FilePen from "@lucide/astro/icons/file-pen";
+import FileText from "@lucide/astro/icons/file-text";
+import FlaskConical from "@lucide/astro/icons/flask-conical";
+import Folder from "@lucide/astro/icons/folder";
+import FolderTree from "@lucide/astro/icons/folder-tree";
+import Gem from "@lucide/astro/icons/gem";
+import Globe from "@lucide/astro/icons/globe";
+import GraduationCap from "@lucide/astro/icons/graduation-cap";
+import Hammer from "@lucide/astro/icons/hammer";
+import Heart from "@lucide/astro/icons/heart";
+import HeartPulse from "@lucide/astro/icons/heart-pulse";
+import LifeBuoy from "@lucide/astro/icons/life-buoy";
+import Lightbulb from "@lucide/astro/icons/lightbulb";
+import Link from "@lucide/astro/icons/link";
+import List from "@lucide/astro/icons/list";
+import Lock from "@lucide/astro/icons/lock";
+import LockKeyhole from "@lucide/astro/icons/lock-keyhole";
+import MapPin from "@lucide/astro/icons/map-pin";
+import Megaphone from "@lucide/astro/icons/megaphone";
+import MessageCircle from "@lucide/astro/icons/message-circle";
+import Monitor from "@lucide/astro/icons/monitor";
+import MousePointerClick from "@lucide/astro/icons/mouse-pointer-click";
+import Package from "@lucide/astro/icons/package";
+import PartyPopper from "@lucide/astro/icons/party-popper";
+import Play from "@lucide/astro/icons/play";
+import Plug from "@lucide/astro/icons/plug";
+import Repeat from "@lucide/astro/icons/repeat";
+import RefreshCw from "@lucide/astro/icons/refresh-cw";
+import Rocket from "@lucide/astro/icons/rocket";
+import Ruler from "@lucide/astro/icons/ruler";
+import SatelliteDish from "@lucide/astro/icons/satellite-dish";
+import Save from "@lucide/astro/icons/save";
+import Search from "@lucide/astro/icons/search";
+import Server from "@lucide/astro/icons/server";
+import Settings from "@lucide/astro/icons/settings";
+import Shield from "@lucide/astro/icons/shield";
+import Sparkles from "@lucide/astro/icons/sparkles";
+import Square from "@lucide/astro/icons/square";
+import Stethoscope from "@lucide/astro/icons/stethoscope";
+import Tag from "@lucide/astro/icons/tag";
+import Target from "@lucide/astro/icons/target";
+import Tent from "@lucide/astro/icons/tent";
+import Terminal from "@lucide/astro/icons/terminal";
+import TriangleAlert from "@lucide/astro/icons/triangle-alert";
+import Trophy from "@lucide/astro/icons/trophy";
+import User from "@lucide/astro/icons/user";
+import Webhook from "@lucide/astro/icons/webhook";
+import Wrench from "@lucide/astro/icons/wrench";
+import Zap from "@lucide/astro/icons/zap";
+
+/**
+ * Lucide's own `AstroComponent` type lives at `@lucide/astro/types`, which the
+ * package does not list in its `exports` map, so it cannot be imported. Naming
+ * the shape locally is what keeps the inferred type of `icons` portable into the
+ * published output (otherwise ts2883: the inferred type would reference a
+ * node_modules-relative path).
+ *
+ * `satisfies` rather than a type annotation, so the literal keys survive and
+ * `IconName` stays a union of the actual icon names. A `Record<string, ...>`
+ * annotation would typecheck but silently give up compile-time name validation,
+ * which is the main reason this registry exists.
+ */
+type IconGlyph = (props: Record<string, unknown>) => unknown;
+
+/**
+ * The approved icon vocabulary, written out explicitly.
+ *
+ * This union is the source of truth rather than `keyof typeof icons` because the
+ * map's inferred value type is Lucide's `AstroComponent`, which lives behind a
+ * subpath the package does not export. Anything that leaks that inferred type
+ * into the public surface fails as non-portable (ts2883). Declaring the names
+ * here and annotating the map below keeps full compile-time name checking while
+ * staying publishable.
+ *
+ * Adding an icon means: add the import, add the name here, add the map entry.
+ * Miss any of the three and the build fails, which is the intent.
+ */
+export type IconName =
+  | "accessibility"
+  | "archive"
+  | "atom"
+  | "blocks"
+  | "book"
+  | "book-marked"
+  | "book-open"
+  | "bot"
+  | "brain"
+  | "brush"
+  | "bug"
+  | "chart-column"
+  | "check"
+  | "circle-check"
+  | "circle-x"
+  | "clipboard-list"
+  | "clock"
+  | "cloud"
+  | "code"
+  | "container"
+  | "database"
+  | "dollar-sign"
+  | "drama"
+  | "eye"
+  | "file-code"
+  | "file-pen"
+  | "file-text"
+  | "flask-conical"
+  | "folder"
+  | "folder-tree"
+  | "gem"
+  | "globe"
+  | "graduation-cap"
+  | "hammer"
+  | "heart"
+  | "heart-pulse"
+  | "life-buoy"
+  | "lightbulb"
+  | "link"
+  | "list"
+  | "lock"
+  | "lock-keyhole"
+  | "map-pin"
+  | "megaphone"
+  | "message-circle"
+  | "monitor"
+  | "mouse-pointer-click"
+  | "package"
+  | "party-popper"
+  | "play"
+  | "plug"
+  | "repeat"
+  | "refresh-cw"
+  | "rocket"
+  | "ruler"
+  | "satellite-dish"
+  | "save"
+  | "search"
+  | "server"
+  | "settings"
+  | "shield"
+  | "sparkles"
+  | "square"
+  | "stethoscope"
+  | "tag"
+  | "target"
+  | "tent"
+  | "terminal"
+  | "triangle-alert"
+  | "trophy"
+  | "user"
+  | "webhook"
+  | "wrench"
+  | "zap";
+
+const icons: Record<IconName, IconGlyph> = {
+  accessibility: Accessibility,
+  archive: Archive,
+  atom: Atom,
+  blocks: Blocks,
+  book: Book,
+  "book-marked": BookMarked,
+  "book-open": BookOpen,
+  bot: Bot,
+  brain: Brain,
+  brush: Brush,
+  bug: Bug,
+  "chart-column": ChartColumn,
+  check: Check,
+  "circle-check": CircleCheck,
+  "circle-x": CircleX,
+  "clipboard-list": ClipboardList,
+  clock: Clock,
+  cloud: Cloud,
+  code: Code,
+  container: Container,
+  database: Database,
+  "dollar-sign": DollarSign,
+  drama: Drama,
+  eye: Eye,
+  "file-code": FileCode,
+  "file-pen": FilePen,
+  "file-text": FileText,
+  "flask-conical": FlaskConical,
+  folder: Folder,
+  "folder-tree": FolderTree,
+  gem: Gem,
+  globe: Globe,
+  "graduation-cap": GraduationCap,
+  hammer: Hammer,
+  heart: Heart,
+  "heart-pulse": HeartPulse,
+  "life-buoy": LifeBuoy,
+  lightbulb: Lightbulb,
+  link: Link,
+  list: List,
+  lock: Lock,
+  "lock-keyhole": LockKeyhole,
+  "map-pin": MapPin,
+  megaphone: Megaphone,
+  "message-circle": MessageCircle,
+  monitor: Monitor,
+  "mouse-pointer-click": MousePointerClick,
+  package: Package,
+  "party-popper": PartyPopper,
+  play: Play,
+  plug: Plug,
+  repeat: Repeat,
+  "refresh-cw": RefreshCw,
+  rocket: Rocket,
+  ruler: Ruler,
+  "satellite-dish": SatelliteDish,
+  save: Save,
+  search: Search,
+  server: Server,
+  settings: Settings,
+  shield: Shield,
+  sparkles: Sparkles,
+  square: Square,
+  stethoscope: Stethoscope,
+  tag: Tag,
+  target: Target,
+  tent: Tent,
+  terminal: Terminal,
+  "triangle-alert": TriangleAlert,
+  trophy: Trophy,
+  user: User,
+  webhook: Webhook,
+  wrench: Wrench,
+  zap: Zap,
+};
+
+export interface Props {
+  /** Registry key. See `icons` above for the approved vocabulary. */
+  name: IconName;
+  /** Rendered width and height in px. Defaults to 20 to sit on a text baseline. */
+  size?: number;
+  /** Extra classes merged onto the generated <svg>. */
+  class?: string;
+  /**
+   * Accessible label. Omit for decorative icons that sit beside visible text,
+   * which is the common case: the icon then renders aria-hidden so screen
+   * readers announce the adjacent text once instead of twice.
+   */
+  label?: string;
+}
+
+const { name, size = 20, class: className, label } = Astro.props as Props;
+
+const Glyph = icons[name];
+
+if (!Glyph) {
+  throw new Error(
+    `<Icon name="${name}" /> is not in the azd-web-core icon registry. ` +
+      `Add it to src/components/Icon.astro or use one of: ${Object.keys(icons).join(", ")}`,
+  );
+}
+
+const a11y = label
+  ? ({ role: "img", "aria-label": label } as const)
+  : ({ "aria-hidden": "true" } as const);
+---
+
+<Glyph size={size} class:list={["azd-icon", className]} {...a11y} />
+
+<style>
+  .azd-icon {
+    display: inline-block;
+    vertical-align: -0.125em;
+    flex-shrink: 0;
+  }
+</style>

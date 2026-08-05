@@ -30,6 +30,13 @@ const { links } = Astro.props;
 ))}
 
 <style>
+  /*
+   * Duplicated from Header.astro by necessity: Astro scopes <style> to the elements
+   * in this component's own template, so the rule declared in Header cannot reach
+   * these links. Promoting `.nav-link` to base.css would publish a generic class
+   * name into every consuming site's global namespace, which is a worse trade for
+   * two declarations.
+   */
   .nav-link {
     color: var(--color-text-muted);
   }
