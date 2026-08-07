@@ -23,24 +23,25 @@ export const colors = {
 } as const;
 
 export const fontFamily = {
-  sans: "var(--font-sans)",
-  mono: "var(--font-mono)",
+  sans: "var(--azd-font-sans)",
+  mono: "var(--azd-font-mono)",
 } as const;
 
 export const fontSize = {
-  xs: "var(--text-xs)",
-  sm: "var(--text-sm)",
-  base: "var(--text-base)",
-  lg: "var(--text-lg)",
-  xl: "var(--text-xl)",
-  "2xl": "var(--text-2xl)",
-  "3xl": "var(--text-3xl)",
+  xs: "var(--azd-text-xs)",
+  sm: "var(--azd-text-sm)",
+  base: "var(--azd-text-base)",
+  lg: "var(--azd-text-lg)",
+  xl: "var(--azd-text-xl)",
+  "2xl": "var(--azd-text-2xl)",
+  "3xl": "var(--azd-text-3xl)",
+  "4xl": "var(--azd-text-4xl)",
 } as const;
 
 export const fontWeight = {
-  normal: "var(--font-weight-normal)",
-  semibold: "var(--font-weight-semibold)",
-  bold: "var(--font-weight-bold)",
+  normal: "var(--azd-font-weight-normal)",
+  semibold: "var(--azd-font-weight-semibold)",
+  bold: "var(--azd-font-weight-bold)",
 } as const;
 
 export const borderRadius = {

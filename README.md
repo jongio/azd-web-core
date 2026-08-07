@@ -38,16 +38,21 @@ import FeatureCard from "@jongio/azd-web-core/components/FeatureCard.astro";
 ---
 
 <Layout title="My Extension" extensionName="my-ext">
-  <Header extensionName="my-ext" githubUrl="https://github.com/org/repo" />
+  <Header
+    extensionName="my-ext"
+    navLinks={[{ label: "Docs", href: "/docs" }]}
+    githubUrl="https://github.com/org/repo"
+    hubUrl="https://azd.dev"
+  />
   <HeroBanner
     titleHtml='Build with <span class="gradient-text">azd</span>'
     subtitle="A developer extension for the Azure Developer CLI."
     primaryCta={{ label: "Get Started", href: "#install" }}
   />
   <section class="mx-auto grid max-w-5xl gap-6 p-6 md:grid-cols-3">
-    <FeatureCard title="Fast" description="Optimised for speed." icon="⚡" />
-    <FeatureCard title="Typed" description="Full TypeScript support." icon="🔒" />
-    <FeatureCard title="Themed" description="Dark & light out of the box." icon="🎨" />
+    <FeatureCard title="Fast" description="Optimised for speed." icon="zap" />
+    <FeatureCard title="Typed" description="Full TypeScript support." icon="lock" />
+    <FeatureCard title="Themed" description="Dark & light out of the box." icon="palette" />
   </section>
   <Footer extensionName="my-ext" githubUrl="https://github.com/org/repo" />
 </Layout>
@@ -87,7 +92,7 @@ document.documentElement.setAttribute("data-theme", "light"); // or "dark"
 
 ## Design Tokens
 
-All colours, typography, spacing, radius, and shadows are CSS custom properties defined in `tokens.css`. Components reference them via `var(--color-*)`, `var(--font-*)`, etc. See the file for the full list.
+All colours, typography, spacing, radius, and shadows are CSS custom properties defined in `tokens.css`. Typography, font-family, and spacing tokens are namespaced under `--azd-*` (for example `var(--azd-text-lg)`, `var(--azd-font-sans)`) so they never collide with the variables Tailwind v4 generates utilities from. Colours use `var(--color-*)`. See the file for the full list.
 
 ## CI/CD Integration
 
@@ -98,7 +103,7 @@ All colours, typography, spacing, radius, and shadows are CSS custom properties 
 Consumer sites declare the dependency as a versioned package:
 
 ```json
-"@jongio/azd-web-core": "^2.0.0"
+"@jongio/azd-web-core": "^3.0.0"
 ```
 
 For **local development**, link to your local clone instead of installing from the registry:
@@ -117,14 +122,31 @@ This creates a symlink so edits to azd-web-core components are picked up immedia
 
 When a new version of azd-web-core is published:
 1. `publish.yml` publishes to GitHub Packages
-2. `notify-consumers.yml` sends a `repository_dispatch` event to all consumer repos
-3. Each site's `website.yml` triggers, installs the new version, builds, and deploys to GitHub Pages
+2. `notify-consumers.yml` sends a `repository_dispatch` event to each active consumer repo
+3. Each site's `website.yml` triggers, builds, and deploys to GitHub Pages
+
+> [!IMPORTANT]
+> **This does not deliver the new version.** Every consumer installs with
+> `pnpm install --frozen-lockfile`, which resolves strictly from the committed
+> `pnpm-lock.yaml`. The dispatch rebuilds each site against the *same* version it
+> already had, so the workflow reports success while shipping nothing. Delivery
+> still requires a dependency-bump commit in each consumer that updates both
+> `package.json` and `pnpm-lock.yaml`.
+>
+> `jongio/azd-extensions` additionally has no `repository_dispatch` trigger in its
+> `website.yml`, so it does not even rebuild.
 
 ### Prerequisites
 
 - Each consumer site needs `.npmrc` with `@jongio:registry=https://npm.pkg.github.com`
-- CI workflows use `NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}` for GitHub Packages auth
-- The `CONSUMER_DISPATCH_PAT` secret on this repo needs a PAT with `repo` scope for cross-repo dispatch
+- Each consumer's site-build workflow needs `NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}`
+  on its install step for GitHub Packages auth. This repo's own `ci.yml` installs no
+  private packages and needs no token; only `publish.yml` does.
+- The `CONSUMER_DISPATCH_PAT` secret needs permission to dispatch to the consumer repos.
+  Prefer a fine-grained PAT scoped to exactly the four repos in the `notify-consumers.yml`
+  matrix with **Contents: write**, or a GitHub App installation token. A classic `repo`-scope
+  PAT grants full control of every repository the owner can reach and is far broader than
+  this workflow needs.
 
 ### Publishing a New Version
 

@@ -3,6 +3,15 @@ import type { NavLink } from "./NavLinks.astro";
 import ThemeToggle from "./ThemeToggle.astro";
 import SocialLinks from "./SocialLinks.astro";
 
+/**
+ * The `id` below is namespaced because this component ships into consumer sites
+ * that own their own markup. azd-app already declares an unprefixed
+ * `id="mobile-menu"` on its own dialog, and a duplicate id makes the header's
+ * `aria-controls` resolve by document order rather than by intent. Kept in
+ * frontmatter rather than as an HTML comment so it does not ship to every
+ * rendered page. Guarded by T49.
+ */
+
 export interface Props {
   navLinks: NavLink[];
   githubUrl: string;
@@ -12,6 +21,7 @@ const { navLinks, githubUrl } = Astro.props;
 ---
 
 <nav
+  id="azd-core-mobile-menu"
   class="hidden flex-col gap-[var(--space-2)] border-t px-[var(--space-6)] py-[var(--space-4)] md:hidden"
   style="border-color: var(--color-border); background-color: var(--color-surface);"
   data-mobile-menu
@@ -39,5 +49,8 @@ const { navLinks, githubUrl } = Astro.props;
 <style>
   .mobile-link {
     color: var(--color-text-muted);
+  }
+  .mobile-link:hover {
+    color: var(--color-text);
   }
 </style>

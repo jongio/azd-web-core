@@ -3,10 +3,8 @@ name: CI
 on:
   push:
     branches: [main]
-    paths: ['src/**', 'package.json', 'pnpm-lock.yaml', '.github/workflows/ci.yml']
   pull_request:
     branches: [main]
-    paths: ['src/**', 'package.json', 'pnpm-lock.yaml', '.github/workflows/ci.yml']
 
 permissions:
   contents: read
@@ -22,6 +20,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9

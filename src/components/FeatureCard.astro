@@ -1,9 +1,16 @@
 ---
 /** Feature highlight card with icon, hover glow effect, and optional link wrapper. */
+import Icon from "./Icon.astro";
+import type { IconName } from "./Icon.astro";
+
 export interface Props {
   title: string;
   description: string;
-  icon?: string;
+  /**
+   * Name from the shared icon registry (see Icon.astro), NOT an emoji.
+   * An unknown name fails the build rather than rendering an empty box.
+   */
+  icon?: IconName;
   href?: string;
   badge?: string;
   glowColor?: string;
@@ -11,7 +18,7 @@ export interface Props {
 
 const { title, description, icon, href, badge, glowColor } = Astro.props;
 const Tag = href ? "a" : "div";
-// Validate glowColor to prevent CSS injection — allow only safe patterns
+// Validate glowColor to prevent CSS injection: allow only safe patterns
 const safeColorPattern = /^(var\(--[\w-]+\)|#[0-9a-fA-F]{3,8}|[a-z]{3,20}|rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(,\s*[\d.]+\s*)?\))$/;
 const glowVar = (glowColor && safeColorPattern.test(glowColor)) ? glowColor : "var(--color-primary)";
 ---
@@ -34,15 +41,15 @@ const glowVar = (glowColor && safeColorPattern.test(glowColor)) ? glowColor : "v
   )}
 
   {icon && (
-    <div class="mb-[var(--space-4)] text-4xl" aria-hidden="true">
-      {icon}
+    <div class="mb-[var(--space-4)]" style="color: var(--glow);">
+      <Icon name={icon} size={32} />
     </div>
   )}
   <slot name="icon" />
 
   <h3
     class="mb-[var(--space-2)] font-semibold"
-    style="color: var(--color-text); font-size: var(--text-lg);"
+    style="color: var(--color-text); font-size: var(--azd-text-lg);"
   >
     {title}
   </h3>
