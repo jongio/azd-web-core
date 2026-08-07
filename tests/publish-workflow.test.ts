@@ -75,6 +75,20 @@ describe("publish workflow supply-chain isolation", () => {
       expect(step.with?.["persist-credentials"]).toBe(false);
     }
   });
+
+  it("T44: declares public access wherever provenance is requested", () => {
+    // pnpm 11 refuses to generate provenance unless access is explicitly
+    // public, so a --provenance publish fails at the very last step of a
+    // release with the tag already pushed. The v3.0.0 tag failed exactly this
+    // way. Registry visibility is not enough; it has to be declared.
+    const publishStep = wf.jobs.publish.steps.find((step) => step.run?.includes("pnpm publish"));
+    expect(publishStep?.run).toContain("--provenance");
+
+    const pkg = JSON.parse(readFileSync(resolve(dir, "../package.json"), "utf-8")) as {
+      publishConfig?: { access?: string };
+    };
+    expect(pkg.publishConfig?.access).toBe("public");
+  });
 });
 
 describe("supply-chain cooldown", () => {
