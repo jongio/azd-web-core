@@ -60,6 +60,6 @@
     "registry": "https://npm.pkg.github.com"
   },
   "dependencies": {
-    "@lucide/astro": "^1.27.0"
+    "@lucide/astro": "^1.31.0"
   }
 }
