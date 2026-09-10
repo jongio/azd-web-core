@@ -5,5 +5,5 @@ export const author = {
 
 export const social = {
   x: "https://x.com/jongallant",
-  linkedin: "https://www.linkedin.com/in/intenseagile/",
+  linkedin: "https://www.linkedin.com/in/jongallant",
 };

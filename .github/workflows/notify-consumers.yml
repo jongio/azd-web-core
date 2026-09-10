@@ -11,16 +11,21 @@ permissions:
 
 jobs:
   notify:
-    if: github.event.workflow_run.conclusion == 'success'
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      startsWith(github.event.workflow_run.head_branch, 'v')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
+        # Active consumers only. Archived repositories reject repository_dispatch
+        # with 403, which fails the job without any way to recover. jongio/azd-exec
+        # and jongio/azd-copilot were archived and removed from this matrix for
+        # that reason.
         repo:
           - jongio/azd-app
-          - jongio/azd-copilot
-          - jongio/azd-exec
           - jongio/azd-rest
           - jongio/azd-extensions
     steps:
@@ -30,4 +35,8 @@ jobs:
           token: ${{ secrets.CONSUMER_DISPATCH_PAT }}
           repository: ${{ matrix.repo }}
           event-type: azd-web-core-updated
-          client-payload: ${{ toJSON(fromJSON(format('{"version":"{0}"}', github.event.workflow_run.head_branch))) }}
+          # `toJSON` on the raw ref quotes and escapes it. Building the JSON with
+          # `format()` instead would splice the ref in unescaped, and git allows
+          # `"` in ref names, so a crafted tag could inject arbitrary keys into
+          # the payload or break parsing and fail the dispatch for every consumer.
+          client-payload: '{"version": ${{ toJSON(github.event.workflow_run.head_branch) }} }'

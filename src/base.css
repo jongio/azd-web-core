@@ -5,13 +5,13 @@
 @source "./components/*.astro";
 
 /* ==========================================================================
-   Base Styles — "Developer Terminal"
+   Base Styles: "Developer Terminal"
    ========================================================================== */
 
 /* ---- Body ---- */
 body {
-  font-family: var(--font-sans);
-  font-weight: var(--font-weight-normal);
+  font-family: var(--azd-font-sans);
+  font-weight: var(--azd-font-weight-normal);
   background-color: var(--color-background);
   color: var(--color-text);
   line-height: 1.6;
@@ -20,20 +20,22 @@ body {
   transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
-/* ---- Headings ---- */
+/* ---- Headings ----
+   Each size is paired with its own leading. A single global line-height
+   makes large type too airy and small type too tight. */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-sans);
-  font-weight: var(--font-weight-bold);
-  line-height: 1.2;
+  font-family: var(--azd-font-sans);
+  font-weight: var(--azd-font-weight-bold);
   color: var(--color-text);
+  text-wrap: balance;
 }
 
-h1 { font-size: var(--text-3xl); }
-h2 { font-size: var(--text-2xl); }
-h3 { font-size: var(--text-xl); }
-h4 { font-size: var(--text-lg); }
-h5 { font-size: var(--text-base); }
-h6 { font-size: var(--text-sm); font-weight: var(--font-weight-semibold); }
+h1 { font-size: var(--azd-text-3xl); line-height: var(--azd-leading-3xl); letter-spacing: -0.02em; }
+h2 { font-size: var(--azd-text-2xl); line-height: var(--azd-leading-2xl); letter-spacing: -0.015em; }
+h3 { font-size: var(--azd-text-xl);  line-height: var(--azd-leading-xl);  letter-spacing: -0.01em; }
+h4 { font-size: var(--azd-text-lg);  line-height: var(--azd-leading-lg); }
+h5 { font-size: var(--azd-text-base); line-height: var(--azd-leading-base); }
+h6 { font-size: var(--azd-text-sm); line-height: var(--azd-leading-sm); font-weight: var(--azd-font-weight-semibold); }
 
 /* ---- Links ---- */
 a {
@@ -48,7 +50,7 @@ a:hover {
 
 /* ---- Code ---- */
 code, kbd, samp, pre {
-  font-family: var(--font-mono);
+  font-family: var(--azd-font-mono);
 }
 
 code:not(pre code) {

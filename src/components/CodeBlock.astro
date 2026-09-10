@@ -21,7 +21,7 @@ const { code, lang = "shell", title, showCopy = true } = Astro.props;
         <span class="inline-block h-2.5 w-2.5 rounded-full" style="background-color: #fbbf24;"></span>
         <span class="inline-block h-2.5 w-2.5 rounded-full" style="background-color: #34d399;"></span>
       </div>
-      <span class="ml-2 text-xs" style="color: var(--color-text-muted); font-family: var(--font-mono);">
+      <span class="ml-2 text-xs" style="color: var(--color-text-muted); font-family: var(--azd-font-mono);">
         {title}
       </span>
     </div>
@@ -30,7 +30,7 @@ const { code, lang = "shell", title, showCopy = true } = Astro.props;
   <div class="relative">
     <pre
       class="overflow-x-auto px-[var(--space-4)] py-[var(--space-3)] leading-relaxed"
-      style="color: var(--color-text); font-family: var(--font-mono); font-size: var(--text-xs); margin: 0;"
+      style="color: var(--color-text); font-family: var(--azd-font-mono); font-size: var(--azd-text-xs); margin: 0;"
     ><code data-lang={lang}>{code}</code></pre>
 
     {showCopy && (

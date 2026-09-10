@@ -33,7 +33,7 @@ const tabsId = `itabs-${_itabsCounter}`;
         aria-controls={`${tabsId}-panel-${i}`}
         tabindex={i === 0 ? 0 : -1}
         class="inline-flex items-center gap-1.5 whitespace-nowrap px-[var(--space-4)] py-[var(--space-2)] font-semibold transition-colors"
-        style={`font-size: var(--text-xs); ${i === 0
+        style={`font-size: var(--azd-text-xs); ${i === 0
           ? "color: var(--color-primary); border-bottom: 2px solid var(--color-primary);"
           : "color: var(--color-text-muted); border-bottom: 2px solid transparent;"}`}
         data-tab-index={i}
@@ -57,7 +57,7 @@ const tabsId = `itabs-${_itabsCounter}`;
       <div class="relative px-[var(--space-4)] py-[var(--space-3)]">
         <pre
           class="overflow-x-auto leading-relaxed"
-          style="color: var(--color-text); font-family: var(--font-mono); font-size: var(--text-xs); margin: 0;"
+          style="color: var(--color-text); font-family: var(--azd-font-mono); font-size: var(--azd-text-xs); margin: 0;"
         ><code>{tab.commands.join("\n")}</code></pre>
         <button
           class="absolute right-[var(--space-3)] top-[var(--space-3)] rounded-md px-[var(--space-2)] py-0.5 opacity-60 transition-opacity hover:opacity-100"

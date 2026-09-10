@@ -22,13 +22,23 @@ const { extensionName, navLinks, githubUrl, hubUrl } = Astro.props;
   <div class="mx-auto flex max-w-6xl items-center justify-between px-[var(--space-6)] py-[var(--space-3)]">
     <!-- Logo / Name -->
     <div class="flex items-center gap-[var(--space-3)]">
-      <a href="/" class="flex items-center gap-[var(--space-2)] hover:no-underline">
-        <img
-          src="/azure-icon.svg"
-          alt=""
-          class="h-5 w-5"
+      <a href={import.meta.env.BASE_URL} class="flex items-center gap-[var(--space-2)] hover:no-underline">
+        <svg
           aria-hidden="true"
-        />
+          class="h-5 w-5"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          style="color: var(--color-primary);"
+        >
+          <polyline points="4 17 10 11 4 5" />
+          <line x1="12" y1="19" x2="20" y2="19" />
+        </svg>
         <span class="text-base font-semibold" style="color: var(--color-text);">
           {extensionName}
         </span>
@@ -58,6 +68,7 @@ const { extensionName, navLinks, githubUrl, hubUrl } = Astro.props;
       style="color: var(--color-text-muted);"
       aria-label="Toggle menu"
       aria-expanded="false"
+      aria-controls="azd-core-mobile-menu"
       data-mobile-toggle
     >
       <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
@@ -69,59 +80,17 @@ const { extensionName, navLinks, githubUrl, hubUrl } = Astro.props;
 </header>
 
 <script>
+  import { initMobileMenu } from "../utils/mobileMenu";
+
   let controller: AbortController | null = null;
 
-  function initHeader() {
+  function setup() {
     controller?.abort();
-    controller = new AbortController();
-    const { signal } = controller;
-
-    const toggle = document.querySelector("[data-menu-toggle]");
-    const menu = document.querySelector("[data-mobile-menu]");
-    if (toggle && menu) {
-      toggle.addEventListener("click", () => {
-        menu.classList.toggle("hidden");
-        toggle.setAttribute("aria-expanded", String(!menu.classList.contains("hidden")));
-        if (!menu.classList.contains("hidden")) {
-          menu.classList.add("flex");
-        } else {
-          menu.classList.remove("flex");
-        }
-      }, { signal });
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && !menu.classList.contains("hidden")) {
-          menu.classList.add("hidden");
-          menu.classList.remove("flex");
-          toggle.setAttribute("aria-expanded", "false");
-          (toggle as HTMLElement).focus();
-          return;
-        }
-        // Focus trap: keep Tab cycling within the mobile menu when open
-        if (e.key === "Tab" && !menu.classList.contains("hidden")) {
-          const focusable = [
-            toggle as HTMLElement,
-            ...Array.from(menu.querySelectorAll<HTMLElement>(
-              'a[href], button, [tabindex]:not([tabindex="-1"])'
-            )),
-          ];
-          if (focusable.length === 0) return;
-          const first = focusable[0];
-          const last = focusable[focusable.length - 1];
-          if (e.shiftKey && document.activeElement === first) {
-            e.preventDefault();
-            last.focus();
-          } else if (!e.shiftKey && document.activeElement === last) {
-            e.preventDefault();
-            first.focus();
-          }
-        }
-      }, { signal });
-    }
+    controller = initMobileMenu(document);
   }
 
-  initHeader();
-  document.addEventListener("astro:page-load", initHeader);
+  setup();
+  document.addEventListener("astro:page-load", setup);
 </script>
 <style>
   .nav-link {
@@ -131,15 +100,3 @@ const { extensionName, navLinks, githubUrl, hubUrl } = Astro.props;
     color: var(--color-text);
   }
 </style>
-
-<script>
-  const toggle = document.querySelector("[data-mobile-toggle]");
-  const menu = document.querySelector("[data-mobile-menu]");
-
-  toggle?.addEventListener("click", () => {
-    const expanded = toggle.getAttribute("aria-expanded") === "true";
-    toggle.setAttribute("aria-expanded", String(!expanded));
-    menu?.classList.toggle("hidden");
-    menu?.classList.toggle("flex");
-  });
-</script>

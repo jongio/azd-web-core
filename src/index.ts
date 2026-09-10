@@ -25,6 +25,7 @@ export const components = {
   CodeBlock: "@jongio/azd-web-core/components/CodeBlock.astro",
   HeroBanner: "@jongio/azd-web-core/components/HeroBanner.astro",
   SuiteNav: "@jongio/azd-web-core/components/SuiteNav.astro",
+  Icon: "@jongio/azd-web-core/components/Icon.astro",
 } as const;
 
 // Tailwind preset re-export
@@ -34,3 +35,8 @@ export * from "./tailwind-preset.ts";
 // Utilities
 export { initClipboardButtons } from "./utils/clipboard.ts";
 export type { ClipboardButtonOptions } from "./utils/clipboard.ts";
+// TOGGLE_SELECTOR / MENU_SELECTOR stay module-local. They are internal DOM hooks
+// shared with the test suite, not package API. Publishing them would make a
+// rename a semver-major break for a capability no consumer uses, and
+// initClipboardButtons sets the precedent of not exporting its selectors.
+export { initMobileMenu } from "./utils/mobileMenu.ts";

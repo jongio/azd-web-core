@@ -1,0 +1,15 @@
+{
+  // The root tsconfig excludes test files so that `declaration` output and
+  // `rootDir` stay scoped to shipped source. That left every test file
+  // unchecked, which is how a test asserting on a handler that could never bind
+  // survived for months (issue #27). This config type-checks them separately.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": false,
+    "rootDir": ".",
+    "module": "preserve",
+    "types": ["node", "vitest/globals"]
+  },
+  "include": ["src", "tests"],
+  "exclude": []
+}
