@@ -12,6 +12,8 @@ export default getViteConfig({
   test: {
     globals: true,
     include: ["src/**/*.test.ts", "tests/**/*.test.ts"],
+    // Vitest 5's fork pool can time out while starting workers on Windows.
+    pool: "threads",
     // Randomise order so a test that leaks a listener or mutates shared state
     // fails here instead of passing by declaration-order luck. The seed is
     // pinned because `pnpm test` gates publishing: a fresh seed per run would
