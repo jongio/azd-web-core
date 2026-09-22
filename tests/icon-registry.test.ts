@@ -58,19 +58,26 @@ describe("Icon registry", () => {
     expect(union).toStrictEqual([...union].sort());
   });
 
-  it("exposes exactly the imported icons in the IconName union", () => {
-    expect([...union].sort()).toStrictEqual([...imports.keys()].sort());
+  it("exposes exactly the runtime map keys in the IconName union", () => {
+    expect([...union].sort()).toStrictEqual([...map.keys()].sort());
   });
 
-  it("exposes exactly the imported icons in the runtime map", () => {
-    expect([...map.keys()].sort()).toStrictEqual([...imports.keys()].sort());
+  it("maps every imported icon identifier exactly once", () => {
+    expect([...map.values()].sort()).toStrictEqual([...imports.values()].sort());
   });
 
-  it("maps each icon name to the identifier imported for that name", () => {
+  it("maps each icon name to an imported identifier", () => {
+    const importedIdentifiers = new Set(imports.values());
     for (const [name, identifier] of map) {
-      expect(identifier, `icons["${name}"] is wired to the wrong import`).toBe(
-        imports.get(name),
-      );
+      expect(
+        importedIdentifiers.has(identifier),
+        `icons["${name}"] references ${identifier}, which is not imported`,
+      ).toBe(true);
     }
+  });
+
+  it("preserves public names when an upstream icon is renamed", () => {
+    expect(imports.get("book-bookmark")).toBe("BookMarked");
+    expect(map.get("book-marked")).toBe("BookMarked");
   });
 });
