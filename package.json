@@ -1,6 +1,6 @@
 {
   "name": "@jongio/azd-web-core",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Shared Astro components, design tokens, and Tailwind preset for azd extension websites",
   "type": "module",
   "packageManager": "pnpm@12.5.1",
